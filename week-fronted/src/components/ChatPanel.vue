@@ -187,9 +187,6 @@
             :data-mid="msg.id"
             :class="{flash: flashMid === msg.id}"
           />
-          <div v-if="chatStore.sending" class="streaming-flag">
-            正在生成…（可在 AI 消息气泡上点击「暂停」撤回本次问题）
-          </div>
         </template>
         <el-empty v-else description="请在左侧选择对话，或点击项目右侧 + 创建新对话" :image-size="90" />
       </div>

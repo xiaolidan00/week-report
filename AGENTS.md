@@ -56,6 +56,41 @@ week-fronted/
     └── types/             # api.ts(数据模型+SSE事件) electron.d.ts(Window.electronApi)
 ```
 
+## 后端 API 接口一览
+
+统一前缀 `http://127.0.0.1:8000`（前端 vite 把 `/api` 代理到该地址）；错误响应为 FastAPI 标准 `{"detail": "..."}` + 状态码。
+
+### 项目（`routers/projects.py`）
+
+| 方法 | 路径 | 说明 | 请求 | 响应 |
+| --- | --- | --- | --- | --- |
+| POST | `/api/projects` | 添加项目（校验路径存在/为文件夹/git 仓库；重复 409） | body `{path}`（git 仓库绝对路径） | `ProjectOut {id,name,path,created_at}` |
+| GET | `/api/projects` | 项目列表（id 倒序） | — | `ProjectOut[]` |
+| DELETE | `/api/projects/{project_id}` | 删除项目（级联删对话/消息 + 删除 chroma collection） | — | `{ok:true}`（404 不存在） |
+
+### 对话（`routers/chats.py`）
+
+| 方法 | 路径 | 说明 | 请求 | 响应 |
+| --- | --- | --- | --- | --- |
+| POST | `/api/chats` | 新建对话（title 缺省/空白 → 「对话 N」） | body `{project_id, title?}` | `ChatOut {id,project_id,title,created_at}`（404 项目不存在） |
+| GET | `/api/chats?project_id=` | 对话列表（可选按项目过滤，id 升序） | query `project_id?` | `ChatOut[]` |
+| DELETE | `/api/chats/{chat_id}` | 删除对话（messages 级联删除） | — | `{ok:true}`（404 不存在） |
+| GET | `/api/chats/{chat_id}/messages` | 历史消息（id 升序） | — | `MessageOut[] {id,chat_id,role(user/assistant),content,created_at}`（404 不存在） |
+
+### 对话流 / 健康检查（`routers/chat_stream.py`）
+
+| 方法 | 路径 | 说明 | 请求 | 响应 |
+| --- | --- | --- | --- | --- |
+| POST | `/api/chats/{chat_id}/messages` | SSE 流式对话/周报生成（详见下方「SSE 协议」） | body `{content, since?, until?, generate?}` | `text/event-stream` 事件流 |
+| POST | `/api/chats/{chat_id}/stop` | 暂停该对话正在进行的生成 | — | `{ok:bool}`（无进行中生成时为 false） |
+| GET | `/api/health` | 本地模型健康检查（chat 探测 8001，embed 探测 8002） | — | `{chat:bool, embed:bool}` |
+
+### git 预览（`routers/git_log.py`）
+
+| 方法 | 路径 | 说明 | 请求 | 响应 |
+| --- | --- | --- | --- | --- |
+| GET | `/api/git/log` | 时间范围提交预览（最多 200 条） | query `project_id, since?, until?` | `{commits:[...], total}`（404 项目不存在 / 400 git 错误） |
+
 ## 关键设计
 
 ### SSE 协议（POST /api/chats/{id}/messages）

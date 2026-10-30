@@ -31,8 +31,8 @@ async def chat_messages(chat_id: int, body: ChatRequest):
 
 @router.post("/chats/{chat_id}/stop")
 async def stop_generation(chat_id: int):
-    """暂停该对话正在进行的生成（由前端「暂停」按钮触发）。"""
-    return {"ok": chat_service.request_stop(chat_id)}
+    """暂停或取消该对话正在进行的生成（由前端「暂停」或「取消思考」按钮触发）。"""
+    return {"ok": chat_service.request_cancel(chat_id)}
 
 
 @router.get("/health")

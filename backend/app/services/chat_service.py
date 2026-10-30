@@ -74,11 +74,11 @@ _active_streams: set[int] = set()
 _stop_flags: set[int] = set()
 
 
-def request_stop(chat_id: int) -> bool:
-    """请求停止该对话正在进行的生成；返回是否确实存在进行中的生成。"""
+def request_cancel(chat_id: int) -> bool:
+    """请求取消该对话正在进行的思考；返回是否确实存在进行中的生成。"""
     if chat_id not in _active_streams:
         return False
-    _stop_flags.add(chat_id)
+    _active_streams.discard(chat_id)
     return True
 
 

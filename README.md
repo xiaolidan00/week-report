@@ -93,7 +93,7 @@ backend\start-embed.bat
 ```bat
 D:\softwares\llama-b10883-bin-win-cpu-x64\llama-server.exe ^
   -m D:\softwares\llama-b10883-bin-win-cpu-x64\models\bge-small-zh-v1.5-q4_k_m.gguf ^
-  --embedding --port 8002 
+  --embedding --port 8002
 ```
 
 ## 3. 启动后端（端口 8000）
@@ -145,5 +145,3 @@ week-report/
     ├── electron/     #   main.ts(窗口/原生选目录 IPC) + preload.ts
     └── src/          #   api/(REST+SSE) stores/(Pinia) components/(树/聊天/周报)
 ```
-
-浏览器访问 http://localhost:5173
