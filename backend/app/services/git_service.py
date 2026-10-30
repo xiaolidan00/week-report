@@ -46,7 +46,7 @@ def get_log(
     limit: int = 500,
 ) -> list[dict[str, Any]]:
     """读取时间范围内的提交日志（新→旧）。"""
-    args = ["log", f"--max-count={limit}", f"--pretty=format:{_RS}%H{_FS}%h{_FS}%ad{_FS}%an{_FS}%s{_FS}%b"]
+    args = ["log","--all", f"--max-count={limit}", f"--pretty=format:{_RS}%H{_FS}%h{_FS}%ad{_FS}%an{_FS}%s{_FS}%b"]
     args.append("--date=short")
     if since:
         args.append(f"--since={since}")
