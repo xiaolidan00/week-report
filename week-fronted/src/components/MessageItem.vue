@@ -38,7 +38,9 @@
       <div class="bubble-header">
         <span class="role">{{ isUser ? "我" : "AI 周报助手" }}</span>
         <span class="time">{{ message.created_at }}</span>
-        <el-button v-if="isStreaming" class="cancel-btn" type="danger" @click="pause"> 取消思考 </el-button>
+        <el-button v-if="chatStore.sending && isStreaming" class="cancel-btn" type="danger" @click="pause">
+          取消思考
+        </el-button>
         <el-button
           v-if="!isUser && message.content && !isStreaming"
           class="copy-btn"
