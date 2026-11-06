@@ -18,7 +18,7 @@
       ElNotification.error({
         title: "后端服务未连接",
         message: e instanceof Error ? e.message : String(e),
-        duration: 8000
+        duration: 8999
       });
     }
     // 2. 检查本地模型服务
@@ -27,7 +27,7 @@
       if (!h.chat) {
         ElNotification.warning({
           title: "对话模型未启动",
-          message: "请运行 backend\\start-llama.bat 启动 llama-server (8001)",
+          message: "请运行 backend\\start-llama.bat 启动 llama-server (8444)",
           duration: 10000
         });
       }

@@ -157,10 +157,8 @@
   }
   .commit-subject {
     flex: 1;
-    min-width: 0;
+    min-width: 100px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   .commit-author {
     flex: 0 0 auto;
