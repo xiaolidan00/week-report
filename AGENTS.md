@@ -16,7 +16,7 @@
   - 仅可**新增**业务依赖
 - **后端**（目录 `backend/`）：Python 3.14 + FastAPI + LangChain 1.x + langchain-openai + SQLite(stdlib sqlite3) + chromadb 1.x
 - **本地模型**（llama-server，OpenAI 兼容）：
-  - 对话：`Qwen3.5-4B-Q4_K_M.gguf` 端口 **8001**
+  - 对话：`Qwen3.5-9B-Q8_0.gguf` 端口 **8444**
   - Embedding：`bge-small-zh-v1.5-q4_k_m.gguf` 端口 **8002**（`--embedding` 模式）
   - 路径：`D:\softwares\llama-b10883-bin-win-cpu-x64\`
 
@@ -37,7 +37,7 @@ backend/
 │   └── services/
 │       ├── git_service.py # 子进程 git log --since/--until（0x1e/0x1f 分隔解析）
 │       ├── rag_service.py # 提交切块 -> embedding(8002) -> chroma upsert/query/get
-│       ├── llm_service.py # LangChain ChatOpenAI -> 8001 流式
+│       ├── llm_service.py # LangChain ChatOpenAI -> 8444 流式
 │       └── chat_service.py# 组装 system+RAG上下文+历史 -> SSE 事件流，消息落库
 ├── chroma/                # 向量库持久化（collection = project_{id}）
 ├── requirements.txt / .env.example
@@ -58,7 +58,7 @@ week-fronted/
 
 ## 后端 API 接口一览
 
-统一前缀 `http://127.0.0.1:8000`（前端 vite 把 `/api` 代理到该地址）；错误响应为 FastAPI 标准 `{"detail": "..."}` + 状态码。
+统一前缀 `http://127.0.0.1:8999`（前端 vite 把 `/api` 代理到该地址）；错误响应为 FastAPI 标准 `{"detail": "..."}` + 状态码。
 
 ### 项目（`routers/projects.py`）
 
@@ -83,7 +83,7 @@ week-fronted/
 | ---- | ------------------------------- | --------------------------------------------------- | ------------------------------------------- | ------------------------------------- |
 | POST | `/api/chats/{chat_id}/messages` | SSE 流式对话/周报生成（详见下方「SSE 协议」）       | body `{content, since?, until?, generate?}` | `text/event-stream` 事件流            |
 | POST | `/api/chats/{chat_id}/stop`     | 取消该对话正在进行的生成                            | —                                           | `{ok:bool}`（无进行中生成时为 false） |
-| GET  | `/api/health`                   | 本地模型健康检查（chat 探测 8001，embed 探测 8002） | —                                           | `{chat:bool, embed:bool}`             |
+| GET  | `/api/health`                   | 本地模型健康检查（chat 探测 8444，embed 探测 8002） | —                                           | `{chat:bool, embed:bool}`             |
 
 ### git 预览（`routers/git_log.py`）
 
@@ -123,7 +123,7 @@ week-fronted/
 - markdown 渲染：`MarkdownView` 对流式内容 120ms 节流；`renderMarkdown` 三级降级（完整管线 → 无 mermaid 管线 → 转义纯文本），防止流式中不完整的 mermaid 代码块阻塞渲染
 - 周报消息卡片带「复制」按钮（`navigator.clipboard.writeText` 原始 markdown）
 - 输入框快捷键：Enter 发送，**Ctrl+Enter 换行**（Shift+Enter 亦不发送、保留默认换行）
-- `vite.config.ts`：`/api` 代理到 `127.0.0.1:8000`；别名 `@ → src`（tsconfig 已配 paths）
+- `vite.config.ts`：`/api` 代理到 `127.0.0.1:8999`；别名 `@ → src`（tsconfig 已配 paths）
 
 ## 常用命令
 

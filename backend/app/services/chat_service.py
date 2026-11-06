@@ -202,7 +202,7 @@ async def stream_chat(
 
         answer = "".join(parts).strip()
         if not answer:
-            yield _sse({"error": "模型返回为空，请确认 llama-server(8001) 已启动"})
+            yield _sse({"error": "模型返回为空，请确认 llama-server(8444) 已启动"})
             return
         if new_title:
             with get_db() as db:

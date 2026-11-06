@@ -48,7 +48,7 @@ Python + FastAPI + LangChain + SQLite
 
 llama.cpp（llama-server，OpenAI 兼容接口）：
 
-- 对话模型：Qwen3.5-4B（8001 端口）
+- 对话模型：Qwen3.5-9B（8444 端口）
 - Embedding 模型：本地 `bge-small-zh-v1.5-q4_k_m.gguf`（8002 端口，`--embedding` 模式）
 
 ## 执行流程
@@ -68,7 +68,7 @@ llama.cpp（llama-server，OpenAI 兼容接口）：
 
 # 启动步骤（Windows）
 
-## 1. 启动 llama-server（本地模型服务，端口 8001）
+## 1. 启动 llama-server（本地模型服务，端口 8444）
 
 ```bat
 backend\start-llama.bat
@@ -78,8 +78,8 @@ backend\start-llama.bat
 
 ```bat
 D:\softwares\llama-b10883-bin-win-cpu-x64\llama-server.exe ^
-  -m D:\softwares\llama-b10883-bin-win-cpu-x64\models\Qwen3.5-4B-Q4_K_M.gguf ^
-  --port 8001
+  -m D:\softwares\llama-b10883-bin-win-cpu-x64\models\Qwen3.5-9B-Q8_0.gguf ^
+  --port 8444
 ```
 
 ## 2. 启动 embedding 服务（本地 GGUF embedding，端口 8002）
@@ -96,7 +96,7 @@ D:\softwares\llama-b10883-bin-win-cpu-x64\llama-server.exe ^
   --embedding --port 8002
 ```
 
-## 3. 启动后端（端口 8000）
+## 3. 启动后端（端口 8999）
 
 ```bat
 cd backend
@@ -109,7 +109,7 @@ start-backend.bat
 或手动：
 
 ```bat
-.venv\Scripts\python -m uvicorn app.main:app --port 8000
+.venv\Scripts\python -m uvicorn app.main:app --port 8999
 ```
 
 ## 4. 启动前端（Electron + Vite，端口 5173）
@@ -120,7 +120,7 @@ npm install
 npm run dev
 ```
 
-`npm run dev` 会同时启动 Vite 开发服务器并打开 Electron 窗口（加载 http://localhost:5173，`/api` 代理到 8000）。
+`npm run dev` 会同时启动 Vite 开发服务器并打开 Electron 窗口（加载 http://localhost:5173，`/api` 代理到 8999）。
 
 ## 5. 打包（可选）
 
@@ -138,9 +138,9 @@ week-report/
 ├── backend/          # Python + FastAPI + LangChain + SQLite + chroma
 │   ├── app/          #   main/config/db/models + routers + services(git/rag/llm/chat)
 │   ├── chroma/       #   向量库持久化目录（按项目分 collection）
-│   ├── start-llama.bat    # 8001 对话模型
+│   ├── start-llama.bat    # 8444 对话模型
 │   ├── start-embed.bat    # 8002 embedding 模型
-│   └── start-backend.bat  # 8000 后端
+│   └── start-backend.bat  # 8999 后端
 └── week-fronted/     # Electron + Vue3 + Element Plus + Vite + TS + Pinia
     ├── electron/     #   main.ts(窗口/原生选目录 IPC) + preload.ts
     └── src/          #   api/(REST+SSE) stores/(Pinia) components/(树/聊天/周报)

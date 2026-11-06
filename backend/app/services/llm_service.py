@@ -1,4 +1,4 @@
-"""本地对话模型封装：LangChain ChatOpenAI -> llama-server (OpenAI 兼容, 8001)。"""
+"""本地对话模型封装：LangChain ChatOpenAI -> llama-server (OpenAI 兼容, 8444)。"""
 from typing import AsyncIterator
 
 import httpx

@@ -8,10 +8,10 @@ BACKEND_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BACKEND_DIR / ".env")
 
 BACKEND_HOST = os.getenv("BACKEND_HOST", "127.0.0.1")
-BACKEND_PORT = int(os.getenv("BACKEND_PORT", "8000"))
+BACKEND_PORT = int(os.getenv("BACKEND_PORT", "8999"))
 
-CHAT_MODEL_BASE_URL = os.getenv("CHAT_MODEL_BASE_URL", "http://127.0.0.1:8001/v1")
-CHAT_MODEL_NAME = os.getenv("CHAT_MODEL_NAME", "Qwen3.5-4B")
+CHAT_MODEL_BASE_URL = os.getenv("CHAT_MODEL_BASE_URL", "http://127.0.0.1:8444/v1")
+CHAT_MODEL_NAME = os.getenv("CHAT_MODEL_NAME", "Qwen3.5-9B")
 CHAT_MODEL_TEMPERATURE = float(os.getenv("CHAT_MODEL_TEMPERATURE", "0.3"))
 
 EMBED_MODEL_BASE_URL = os.getenv("EMBED_MODEL_BASE_URL", "http://127.0.0.1:8002/v1")
